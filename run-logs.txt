@@ -1,0 +1,18 @@
+API server log:
+> @text2pdf/api@0.1.0 dev /home/sarthaksha/Projects/text-to-pdf-converter/apps/api
+> ts-node-dev --respawn --transpile-only --exit-child --ignore-watch node_modules --require tsconfig-paths/register src/index.ts
+
+[INFO] 14:26:34 ts-node-dev ver. 2.0.0 (using ts-node ver. 10.9.2, typescript ver. 5.9.3)
+API listening on http://localhost:4000
+
+Web dev server log:
+> @text2pdf/web@0.1.0 dev /home/sarthaksha/Projects/text-to-pdf-converter/apps/web
+> vite
+
+2:27:22 PM [vite] (client) Re-optimizing dependencies because lockfile has changed
+Port 3000 is in use, trying another one...
+
+  VITE v7.3.1  ready in 625 ms
+
+  ➜  Local:   http://localhost:3001/
+  ➜  Network: use --host to expose

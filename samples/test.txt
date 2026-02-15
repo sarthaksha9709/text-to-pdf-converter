@@ -1,0 +1,4 @@
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin tempus felis quis lorem elementum, non porta erat tempus.
+Suspendisse potenti. Integer at congue purus. Integer in dapibus nibh. Etiam mauris erat, dapibus eget justo ut, porta aliquet libero.
+
+This sample file is used to verify text-to-PDF conversion. Feel free to replace it with your own content during tests.

@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "moduleResolution": "Node",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "resolveJsonModule": true,
+    "baseUrl": "./",
+    "paths": {
+      "@text2pdf/pdf-engine": ["packages/pdf-engine/src"],
+      "@text2pdf/pdf-engine/*": ["packages/pdf-engine/src/*"]
+    }
+  }
+}
