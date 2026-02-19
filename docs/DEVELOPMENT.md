@@ -108,8 +108,8 @@ The Vite dev server proxies `/api/*` to `http://localhost:4000`. If you see CORS
 ## Common Issues
 
 | Problem                                     | Solution                                                                   |
-| ------------------------------------------- | -------------------------------------------------------------------------- |
+| ------------------------------------------- | -------------------------------------------------------------------------- | ----------- |
 | `pnpm: command not found`                   | Run `npm install -g pnpm`                                                  |
 | `Cannot find module '@text2pdf/pdf-engine'` | Run `pnpm --filter @text2pdf/pdf-engine build` first                       |
-| `Port 3000/4000 already in use`             | Kill the existing process: `lsof -ti :3000 \| xargs kill`                  |
+| `Port 3000/4000 already in use`             | Kill the existing process: `lsof -ti :3000                                 | xargs kill` |
 | ESLint errors on `import type`              | `verbatimModuleSyntax` is enabled; use `import type` for type-only imports |
