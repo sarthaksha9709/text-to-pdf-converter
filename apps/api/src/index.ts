@@ -3,17 +3,20 @@ import express from 'express';
 import multer from 'multer';
 import { z } from 'zod';
 import { generatePdfBuffer, PdfOptions } from '@text2pdf/pdf-engine';
+import { config } from './config/index.js';
+import { errorHandler } from './middleware/errorHandler.js';
+import { rateLimiter } from './middleware/rateLimiter.js';
 
-const PORT = Number(process.env.PORT) || 4000;
-const app = express();
+export const app = express();
 
-app.use(cors());
+app.use(cors({ origin: config.corsOrigin }));
 app.use(express.json({ limit: '1mb' }));
 app.use(express.urlencoded({ extended: true }));
+app.use(rateLimiter);
 
 const upload = multer({
   storage: multer.memoryStorage(),
-  limits: { fileSize: 5 * 1024 * 1024 },
+  limits: { fileSize: config.maxFileSize },
   fileFilter: (_req, file, cb) => {
     if (file.mimetype === 'text/plain' || file.mimetype === 'text/markdown') {
       cb(null, true);
@@ -92,7 +95,8 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
       }
     }
 
-    const filename = sanitizeFilename(req.body.filename as string | undefined) || text.split('\n')[0];
+    const filename =
+      sanitizeFilename(req.body.filename as string | undefined) || text.split('\n')[0];
 
     const { data, filename: safeName } = await generatePdfBuffer({
       text,
@@ -115,6 +119,10 @@ app.post('/api/convert', upload.single('file'), async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`API listening on http://localhost:${PORT}`);
-});
+app.use(errorHandler);
+
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(config.port, () => {
+    console.log(`API listening on http://localhost:${config.port}`);
+  });
+}

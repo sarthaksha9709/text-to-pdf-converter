@@ -1,0 +1,41 @@
+# Stage 1: Build
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+RUN npm install -g pnpm
+
+COPY package.json pnpm-workspace.yaml tsconfig.base.json ./
+COPY packages/pdf-engine/package.json ./packages/pdf-engine/
+COPY apps/api/package.json ./apps/api/
+
+RUN pnpm install --frozen-lockfile
+
+COPY packages/pdf-engine/ ./packages/pdf-engine/
+COPY apps/api/ ./apps/api/
+
+RUN pnpm --filter @text2pdf/pdf-engine build
+RUN pnpm --filter @text2pdf/api build
+
+# Stage 2: Production runtime
+FROM node:20-alpine AS runner
+
+WORKDIR /app
+
+RUN npm install -g pnpm
+
+COPY package.json pnpm-workspace.yaml ./
+COPY packages/pdf-engine/package.json ./packages/pdf-engine/
+COPY apps/api/package.json ./apps/api/
+
+RUN pnpm install --frozen-lockfile --prod
+
+COPY --from=builder /app/packages/pdf-engine/dist ./packages/pdf-engine/dist
+COPY --from=builder /app/apps/api/dist ./apps/api/dist
+
+ENV NODE_ENV=production
+ENV PORT=4000
+
+EXPOSE 4000
+
+CMD ["node", "apps/api/dist/index.js"]

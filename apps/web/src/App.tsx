@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
-import { generatePdfBuffer, PdfOptions } from '@text2pdf/pdf-engine';
+import { generatePdfBuffer } from '@text2pdf/pdf-engine';
+import type { PdfOptions } from '@text2pdf/pdf-engine';
 import './App.css';
 
 const API_BASE = import.meta.env.VITE_API_URL ?? '';
@@ -60,7 +61,7 @@ function App() {
     const timeout = setTimeout(async () => {
       try {
         const { data } = await generatePdfBuffer({ text, filename, options });
-        const blob = new Blob([data], { type: 'application/pdf' });
+        const blob = new Blob([data.buffer as ArrayBuffer], { type: 'application/pdf' });
         const url = URL.createObjectURL(blob);
         setPreviewUrl((prev) => {
           if (prev) URL.revokeObjectURL(prev);
@@ -166,7 +167,9 @@ function App() {
           <h1>Text → PDF Converter</h1>
           <p>Paste or drop text, tweak layout, preview live, and export.</p>
         </div>
-        <button className="ghost" onClick={clearAll}>Clear</button>
+        <button className="ghost" onClick={clearAll}>
+          Clear
+        </button>
       </header>
 
       <main>
@@ -193,11 +196,7 @@ function App() {
             />
           </div>
 
-          <div
-            className="dropzone"
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={onDrop}
-          >
+          <div className="dropzone" onDragOver={(e) => e.preventDefault()} onDrop={onDrop}>
             <p>Drag & drop .txt or .md files here, or</p>
             <label className="upload-btn">
               Upload a file
@@ -218,7 +217,9 @@ function App() {
               <label>Page Size</label>
               <select
                 value={options.pageSize}
-                onChange={(e) => setOptions({ ...options, pageSize: e.target.value as PdfOptions['pageSize'] })}
+                onChange={(e) =>
+                  setOptions({ ...options, pageSize: e.target.value as PdfOptions['pageSize'] })
+                }
               >
                 <option value="A4">A4</option>
                 <option value="Letter">Letter</option>
@@ -229,7 +230,12 @@ function App() {
               <label>Orientation</label>
               <select
                 value={options.orientation}
-                onChange={(e) => setOptions({ ...options, orientation: e.target.value as PdfOptions['orientation'] })}
+                onChange={(e) =>
+                  setOptions({
+                    ...options,
+                    orientation: e.target.value as PdfOptions['orientation']
+                  })
+                }
               >
                 <option value="portrait">Portrait</option>
                 <option value="landscape">Landscape</option>
@@ -239,7 +245,9 @@ function App() {
               <label>Font</label>
               <select
                 value={options.fontFamily}
-                onChange={(e) => setOptions({ ...options, fontFamily: e.target.value as PdfOptions['fontFamily'] })}
+                onChange={(e) =>
+                  setOptions({ ...options, fontFamily: e.target.value as PdfOptions['fontFamily'] })
+                }
               >
                 <option value="serif">Serif</option>
                 <option value="sans-serif">Sans-serif</option>
@@ -271,7 +279,12 @@ function App() {
               <label>Margins</label>
               <select
                 value={options.marginPreset}
-                onChange={(e) => setOptions({ ...options, marginPreset: e.target.value as PdfOptions['marginPreset'] })}
+                onChange={(e) =>
+                  setOptions({
+                    ...options,
+                    marginPreset: e.target.value as PdfOptions['marginPreset']
+                  })
+                }
               >
                 <option value="normal">Normal</option>
                 <option value="narrow">Narrow</option>
@@ -325,9 +338,7 @@ function App() {
           <h2>Live Preview</h2>
           {!text && <p className="placeholder">Start typing or upload a file to preview.</p>}
           {text && !previewUrl && <p>Preparing preview…</p>}
-          {previewUrl && (
-            <iframe src={previewUrl} title="Preview" />
-          )}
+          {previewUrl && <iframe src={previewUrl} title="Preview" />}
         </section>
       </main>
     </div>

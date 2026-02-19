@@ -1,0 +1,12 @@
+{
+  "build": {
+    "builder": "NIXPACKS",
+    "buildCommand": "pnpm install && pnpm --filter @text2pdf/pdf-engine build && pnpm --filter @text2pdf/api build"
+  },
+  "deploy": {
+    "startCommand": "cd apps/api && node dist/index.js",
+    "healthcheckPath": "/api/health",
+    "healthcheckTimeout": 100,
+    "restartPolicyType": "ON_FAILURE"
+  }
+}
