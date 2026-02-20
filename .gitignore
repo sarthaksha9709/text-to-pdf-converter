@@ -4,3 +4,5 @@ apps/**/dist
 packages/**/dist
 .DS_Store
 .env
+coverage
+*.local

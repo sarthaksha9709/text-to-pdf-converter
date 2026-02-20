@@ -1,0 +1,24 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.api
+    ports:
+      - '4000:4000'
+    environment:
+      - NODE_ENV=development
+      - PORT=4000
+      - CORS_ORIGIN=http://localhost:3000
+    volumes:
+      - ./apps/api/src:/app/apps/api/src
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile.web
+    ports:
+      - '3000:3000'
+    depends_on:
+      - api
+    restart: unless-stopped
